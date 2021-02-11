@@ -1,0 +1,8 @@
+{
+  "deployment-mode" : "fresh",
+  "configuration" : {
+    "endpoints" : {
+      "blockchainIP" : ""
+    }
+  }
+}
