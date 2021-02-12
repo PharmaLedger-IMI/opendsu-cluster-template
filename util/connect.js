@@ -28,46 +28,8 @@ function connect(){
     }
     changeContext(kc);
 
-    console.log('kube context: ',kc.currentContext)
-    /*
-    const yaml = require("js-yaml");
-    const kubeContent = yaml.load(kubeConfig);
+    clusterlogger.log('kube context: ',kc.currentContext)
 
-    // locate the context based on cluster
-    const currentContext = kubeContent['current-context'];
-    //check if current context is for the requested cluster
-    //if no, change to the new context
-    if (currentContext.indexOf(targetcluster) > 1)
-    {
-        console.log('current context is already set.', currentContext);
-    } else {
-        for(const c of kubeContent.contexts)
-        {
-            if (c.name.indexOf(targetcluster) > 1)
-            {
-                console.log('we should change to :', c);
-                kubeContent['current-context'] = c.name;
-            }
-        }
-    }
-    kc = new k8s.KubeConfig();
-    kc.loadFromOptions({
-        clusters : kubeContent.clusters,
-        contexts: kubeContent.contexts,
-        users : kubeContent.users,
-        currentContext : kubeContent.currentContext
-    });
-
-
-    //use the LoadFromOptions method and pass updated json objects
-    //console.log('available contexts', kubeContent.contexts);
-    //console.log("available clusters : ",kubeContent.clusters);
-    //console.log("current context : ", kubeContent['current-context']);
-   // console.log("1st cluster : ",kubeContent.clusters[0].name);
-
-   // clusterlogger.log('Context should be changed on : ',targetcluster);
-
-     */
     return kc;
 }
 
@@ -80,13 +42,13 @@ function changeContext(kubeConfig){
     //if no, change to the new context
     if (currentContext.indexOf(targetcluster) > 1)
     {
-        console.log('current context is already set.', currentContext);
+        clusterlogger.log('current context is already set.', currentContext);
     } else {
         for(const context of kubeConfig.getContexts())
         {
             if (context.name.indexOf(targetcluster) > 1)
             {
-                console.log('Change context to :', context);
+                clusterlogger.log('Change context to :', context.name);
                 kubeConfig.setCurrentContext(context.name);
             }
         }

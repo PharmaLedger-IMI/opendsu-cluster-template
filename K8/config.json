@@ -4,5 +4,77 @@
     "endpoints" : {
       "blockchainIP" : ""
     }
-  }
+  },
+  "deployment" : [
+    {
+      "name": "GoQuorum blockchain",
+      "configuration" : [
+        {
+          "name" : "PVC",
+          "location" : "./K8/Quorum/00-quorum-persistent-volumes.yaml"
+        },
+        {
+          "name" : "genesis",
+          "location" : "./K8/Quorum/01-quorum-genesis.yaml"
+        },
+        {
+          "name" : "shared configuration",
+          "location" : "./K8/Quorum/02-quorum-shared-config.yaml"
+        },
+        {
+          "name" : "services",
+          "location" : "./K8/Quorum/03-quorum-services.yaml"
+        },
+        {
+          "name" : "key configuration",
+          "location" : "./K8/Quorum/04-quorum-keyconfigs.yaml"
+        }
+      ],
+      "deployment" : [
+        {
+          "name" : "deployment node 1",
+          "location" : "./K8/Quorum/deployments/01-quorum-single-deployment.yaml",
+          "expose" : [
+            {
+              "type" : "ClusterIP"
+            }
+          ]
+        },
+        {
+          "name" : "deployment node 2",
+          "location" : "./K8/Quorum/deployments/02-quorum-single-deployment.yaml"
+        },
+        {
+          "name" : "deployment node 3",
+          "location" : "./K8/Quorum/deployments/03-quorum-single-deployment.yaml"
+        },
+        {
+          "name" : "deployment node 4",
+          "location" : "./K8/Quorum/deployments/04-quorum-single-deployment.yaml"
+        }
+      ]
+    },
+    {
+      "name" : "EthSCDeployer",
+      "configuration" : [
+        {
+          "name" : "config map",
+          "location" : "./K8/AnchoringContract/anchor-configmap.yaml",
+          "template" : "./K8/AnchoringContract/anchor-configmap-template.yaml",
+          "configKeyMap" : [
+            {
+              "key" : "<RPC_HOST>",
+              "source" : {
+                "type" : "deploymentReference",
+                "source" : "deployment\\GoQuorum blockchain\\deployment\\deployment node 1",
+                "exposedType" : "ClusterIP",
+                "mode" : "automated"
+              }
+            }
+          ]
+        }
+      ],
+      "deployment" : []
+    }
+  ]
 }
