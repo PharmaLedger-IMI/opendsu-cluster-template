@@ -5,9 +5,10 @@ function deployCluster(callback) {
     require('./cluster').deployCluster((err) => {
         if (err) {
             clusterlogger.log(err);
+            clusterlogger.log('Deploy Cluster ended : 500ERROR');
             return callback(err);
         }
-        clusterlogger.log('200OK');
+        clusterlogger.log('Deploy Cluster ended : 200OK',);
         callback(undefined);
     });
 }

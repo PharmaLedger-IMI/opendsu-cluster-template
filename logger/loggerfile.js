@@ -1,6 +1,15 @@
-let logfile
+global.logfile = undefined;
+
 function startLogger(){
-    logfile = require('fs').openSync('./logs.txt','as+')
+    if (logfile === undefined) {
+        const txtfile = './logs.txt';
+        const fs = require('fs');
+        if (fs.existsSync(txtfile))
+        {
+            fs.unlinkSync(txtfile);
+        }
+        global.logfile = fs.openSync(txtfile, 'as+')
+    }
 }
 
 function log(message){
